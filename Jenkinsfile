@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven-3.8.7' // Must match the Maven name in Jenkins Tools
+        maven 'Maven-3.8.7'  // Name from Jenkins global tool config
+        jdk 'Java-21'        // Make sure Jenkins has Java 21 installed
     }
 
     stages {
@@ -15,6 +16,8 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'mvn clean package'
+                sh 'echo "Contents of target folder:"'
+                sh 'ls -l target || echo "No target directory found"'
             }
         }
 
@@ -26,11 +29,17 @@ pipeline {
 
         stage('Archive Artifact') {
             steps {
-                // Archive the JAR file from target folder
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true, onlyIfSuccessful: true
             }
         }
     }
+
+    post {
+        success {
+            echo '✅ Build and archive succeeded!'
+        }
+        failure {
+            echo '❌ Build failed. Check Maven logs and target folder.'
+        }
+    }
 }
-
-
