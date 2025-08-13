@@ -31,14 +31,6 @@ pipeline {
             }
         }
     }
-
-    post {
-        success {
-            echo 'Build & archive successful!'
-        }
-        failure {
-            echo 'Build failed. Please check logs.'
-        }
     }
 }
 
