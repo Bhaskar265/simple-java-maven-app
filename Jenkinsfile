@@ -27,7 +27,7 @@ pipeline {
         stage('Archive Artifact') {
             steps {
                 // Archive the JAR file from target folder
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                archiveArtifacts artifacts: '**/*.jar', fingerprint: true
             }
         }
     }
